@@ -1,0 +1,91 @@
+{
+  "experiment_name": "model_E_cmip_swinunet_topography",
+  "dataset_path": "climate_swinir_experiments/model_E_cmip_swinunet_topography/data/torch_dataset_model_E_physical_v1",
+  "raw_data": {
+    "training_features_path": "/workspace/data_tomas/cmip/input_19500101-21001231_cmip585.nc",
+    "training_target_path": "/workspace/data_tomas/data_perfect_model/tas_historical_ssp585_19500101-21001231.nc",
+    "training_ref_path": "/workspace/data_tomas/cmip/input_19790101-20141231_cmip.nc",
+    "training_ghg_path": "/workspace/data_tomas/shared/GHG_CMIP6ssp585.dat",
+    "testing_features_path": "/workspace/data_tomas/cmip/input_20150101-21001231_cmip370.nc",
+    "testing_target_path": "/workspace/data_tomas/data_perfect_model/tas_ssp370_20150101-21001231.nc",
+    "testing_ghg_path": "/workspace/data_tomas/shared/GHG_CMIP6ssp370.dat",
+    "mask_path": "/workspace/data_tomas/data_perfect_model/sftlf_CHP12_CNRM-ESM2-1_historical_r1i1p1f2_CNRM-ALADIN64_v1_fx_64x64.nc"
+  },
+  "paths": {
+    "orography_path": "climate_swinir_analysis/data/orography_regridded_64x64_cellmean_copernicus_dem.nc",
+    "region_mask_path": "climate_swinir_analysis/data/region_mask_coquimbo_64x64.nc",
+    "checkpoint_dir": "climate_swinir_experiments/model_E_cmip_swinunet_topography/checkpoints",
+    "log_dir": "climate_swinir_experiments/model_E_cmip_swinunet_topography/logs"
+  },
+  "split": {
+    "train_start": "1950-01-01",
+    "train_end": "2070-12-31",
+    "val_start": "2071-01-01",
+    "val_end": "2100-12-31",
+    "test_start": "2015-01-01",
+    "test_end": "2100-12-31"
+  },
+  "static_features": {
+    "use_orography": true,
+    "use_land_mask": true,
+    "use_lat": true,
+    "use_lon": true,
+    "use_slope": true,
+    "use_roughness": true
+  },
+  "model": {
+    "dynamic_channels": null,
+    "static_channels": 6,
+    "base_channels": 64,
+    "attention_heads": 8,
+    "attention_window_size": 8,
+    "out_chans": 1,
+    "padding_mode": "replicate"
+  },
+  "training": {
+    "batch_size": 16,
+    "num_epochs": 120,
+    "learning_rate": 0.0003,
+    "weight_decay": 0.0001,
+    "scheduler_factor": 0.7,
+    "scheduler_patience": 5,
+    "num_workers": 0,
+    "phase1_epochs": 60,
+    "use_early_stopping": false,
+    "early_stopping_patience": 12,
+    "early_stopping_min_delta": 0.0003
+  },
+  "loss_phase1": {
+    "mse": 1.0,
+    "bias_global": 0.05,
+    "bias_altitudinal": 0.05,
+    "std": 0.05,
+    "gradient": 0.05,
+    "quantile": 0.0
+  },
+  "loss_phase2": {
+    "mse": 1.0,
+    "bias_global": 0.15,
+    "bias_altitudinal": 0.2,
+    "std": 0.1,
+    "gradient": 0.1,
+    "quantile": 0.2
+  },
+  "quantiles": [
+    0.01,
+    0.99
+  ],
+  "benchmarks": {
+    "unet_cmip_cmip_output_path": "/workspace/SwinIR_HF/Normalizacion/data_tomas/unet_outputs/tas_cmip_cmip_output.nc"
+  },
+  "preprocessing": {
+    "dynamic_physical_preprocessing": true,
+    "dynamic_normalization": "zscore_train_split_after_physical_preprocessing",
+    "hus": "log(x + 1e-8)",
+    "temperature": "K_to_C_when_needed",
+    "psl": "Pa_to_hPa_when_needed",
+    "wind": "kept_m_s",
+    "zg": "kept_m",
+    "target_mask": "sftlf > 50"
+  }
+}

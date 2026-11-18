@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "Please cite the associated TopoFusion-Res paper when publication details are available."
+title: "TopoFusion-Res: Multi-resolution topographic fusion and residual learning for regional climate emulation"
+authors:
+  - family-names: "Farías"
+    given-names: "Humberto"
+  - family-names: "Caballero"
+    given-names: "Tomás"
+  - family-names: "Salazar"
+    given-names: "Álvaro"
+  - family-names: "Ortiz"
+    given-names: "Daniel"

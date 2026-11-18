@@ -1,0 +1,11 @@
+# OBSERVED IMPORT DEPENDENCIES ONLY, NOT a tested/version-locked environment
+torch
+numpy
+pandas
+xarray
+scipy
+matplotlib
+# Backends for xarray NetCDF files depend on the original environment:
+# netCDF4
+# cftime
+# graphviz (system executable only for optional graphviz renderers)

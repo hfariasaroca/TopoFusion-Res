@@ -1,0 +1,9 @@
+{
+  "anomaly_definition": "Each dataset's own 365-day daily climatology removed.",
+  "lag1_definition": "Pearson lag-1 autocorrelation of daily anomalies.",
+  "event_threshold_definition": "Cell-wise p90/p10 of ALADIN/RCM daily anomalies over SSP3-7.0 2015-2100.",
+  "threshold_application": "Same ALADIN/RCM threshold applied to RCM, E2 v2 and U-Net.",
+  "warm_event": "Consecutive days with daily anomaly > RCM p90 threshold.",
+  "cold_event": "Consecutive days with daily anomaly < RCM p10 threshold.",
+  "note": "Persistence diagnostic; not presented as a formal ETCCDI heatwave/cold-spell index."
+}

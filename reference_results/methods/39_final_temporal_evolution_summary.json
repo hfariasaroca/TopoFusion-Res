@@ -1,0 +1,25 @@
+{
+  "period": "2015-2100 SSP3-7.0",
+  "calendar": "365-day",
+  "n_years": 86,
+  "n_days": 31390,
+  "n_common_cells_per_day": 1852,
+  "annual_error": {
+    "TopoFusion_Res": {
+      "mean_C": 0.07605710212699515,
+      "mean_absolute_C": 0.10607961843093922,
+      "min_C": -0.12869236345713908,
+      "max_C": 0.40068307097183364
+    },
+    "UNet_CMIP_CMIP": {
+      "mean_C": 0.13265835093096667,
+      "mean_absolute_C": 0.15846542751308507,
+      "min_C": -0.20950982376490934,
+      "max_C": 0.4318045187424975
+    }
+  },
+  "seasonal_cycle": {
+    "TopoFusion_mean_abs_difference_C": 0.12354596653404734,
+    "UNet_mean_abs_difference_C": 0.2285397276230092
+  }
+}
