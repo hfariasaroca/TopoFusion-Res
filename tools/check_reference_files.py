@@ -3,9 +3,9 @@
 from pathlib import Path
 import csv, hashlib, sys
 ROOT=Path(__file__).resolve().parents[1]
-manifest=ROOT/'reference_results'/'FILE_MANIFEST.csv'
+manifest=ROOT/'results'/'FILE_MANIFEST.csv'
 if not manifest.is_file():
-    raise SystemExit('No reference_results/FILE_MANIFEST.csv found')
+    raise SystemExit('No results/FILE_MANIFEST.csv found')
 problems=[]; count=0
 with manifest.open(newline='',encoding='utf-8') as f:
     for row in csv.DictReader(f):

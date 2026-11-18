@@ -1,26 +1,61 @@
-# Reproducibility: independently verifiable levels
+# Reproduction of final experiments and paper analyses
 
-## Level 0 — source provenance
+## 1. Scientific protocol
 
-Available now: original SHA-256-identified model, dataset, preparation, training and evaluation files, plus selected paper-validation scripts. Verify with `python tools/author_source_integrity.py` and `python tools/check_reference_files.py`.
+Stage 1 learns the convolutional base model for 40 epochs (full-topography and no-fine-topography variants); stage 2 freezes the base and trains a bounded residual correction for 12 epochs. The final seed is `20260813`. Training and validation use historical + SSP5-8.5 data with the 2070/2071 split. Held-out cross-scenario evaluation uses SSP3-7.0, 2015–2100 (31,390 daily fields and 1,852 common land cells). See README for the executable training commands.
 
-## Level 1 — synthetic model forward
+The comparison against U-Net uses its original prediction output; it is not a controlled architectural ablation. Errors are against the regional ALADIN simulation, not station observations. Reported single-seed performance and moving-block bootstrap do not establish variability across retraining seeds.
 
-Available if PyTorch is installed: `python tools/smoke_test_models.py`. This tests 24-channel GCM inputs, coarse/fine static features, output shape and zero residual at initialization. It does **not** validate climate accuracy or checkpoint compatibility.
+## 2. Inputs needed for SSP3-7.0 evaluation
 
-## Level 2 — reproduce model predictions (pending)
+- Preprocessed test arrays produced by `scripts/01_prepare_dataset_model_E.py`.
+- Four best checkpoints in `checkpoints/phase1_{full,no_fine_topo}_seed20260813_40epochs/` and `checkpoints/phase2_e2_{full,no_fine_topo}_seed20260813_12epochs/`.
+- U-Net benchmark NetCDF in `inputs/unet/tas_cmip_cmip_output.nc`.
 
-Required: authorized climate datasets, Copernicus DEM processing products, masks, exact preprocessing and 4 weights files, environment metadata, portable paths. A 22×22 float32 coarse-orography source array (supplied by the author) is now included, but its upstream construction has not been reconstructed. The evaluation's SSP3-7.0 U-Net comparison also requires the external U-Net NetCDF output. Full checkpoints are expected under the specific directories in `docs/SOURCE_MAP.md`.
+Execute `python tools/check_run_inputs.py --mode evaluate`, then `python scripts/34_evaluate_final_seeded_ssp370.py`. The evaluation writes under `diagnostics/final_seeded_ssp370/`.
 
-## Level 3 — reproduce quantitative paper figures (pending)
+## 3. Prediction cubes for paper statistics
 
-Many scripts use `diagnostics/final_e2_vs_unet_advanced_diagnostics/prediction_cubes/{rcm.dat,e2_full_seeded.dat,unet.dat,mask.dat,cube_metadata.json}`. These files were not provided and are intentionally not committed to GitHub. The recovered historical `24_final_advanced_diagnostics_e2_vs_unet.py` points to an older E2 checkpoint. We must **not** attribute the final seeded cubes to that script without checking cube metadata. We recovered the final seeded E2 cube producer (`34_evaluate_topography_ablation_ssp370.py`), the phase-1 cube producer (`36_create_phase1_full_seeded_cube.py`), and the imported legacy `build_band_masks` dependency (`17_train_model_E2_residual_head_base_eval.py`). The production of the prerequisite `rcm.dat`, `mask.dat`, `unet.dat` and original `cube_metadata.json` is still not fully traced. The on-server `cube_metadata.json` describes historical `e2.dat`, not the final seeded E2 products. See `docs/PREDICTION_CUBES.md`.
+Several final-analysis scripts require `diagnostics/final_e2_vs_unet_advanced_diagnostics/prediction_cubes/` with:
 
-The bundled `reference_results/` unrounded CSVs and figures constitute author-provided reference outputs; they are **not** newly recomputed on this platform. The paper's rounded display values do not change decisions computed on original bootstrap intervals.
+| Filename | Meaning / expected type |
+|---|---|
+| `cube_metadata.json` | JSON, `shape=[31390,64,64]` |
+| `rcm.dat` | RCM target, float32 |
+| `mask.dat` | Common valid mask, bool |
+| `unet.dat` | U-Net predictions, float32 |
+| `e2_full_seeded.dat` | Final full TopoFusion-Res, float32 |
+| `e2_no_fine_topo_seeded.dat` | Final topography ablation, float32 |
+| `phase1_full_seeded.dat` | Final base model, float32 |
 
-## Scientific comparison limits
+The authors confirmed these cubes exist on their server, but they are **not** bundled here. The author's `cube_metadata.json` was generated with an earlier `e2.dat`; it provides cube shape but not verified provenance for the final seeded predictions.
 
-- The U-Net baseline is a system-level benchmark; optimizer/architecture changes are not a pure controlled ablation.
-- The evaluation estimates fidelity relative to CNRM-ALADIN, not observational truth.
-- Single-seed experiments do not measure training-seed variability; moving-block bootstrap is sensitivity to temporal resampling.
-- Persistence, trend and climate signal metrics can favor U-Net even though daily RMSE, MAE and tail fidelity favor TopoFusion-Res.
+The final-seed cube writers recovered from the authors' source are:
+
+```bash
+# First supply original rcm.dat, mask.dat, unet.dat and metadata plus final checkpoints.
+python analysis/scripts/34_evaluate_topography_ablation_ssp370.py
+python analysis/scripts/36_create_phase1_full_seeded_cube.py
+```
+
+The first script imports `build_band_masks` from `scripts/17_train_model_E2_residual_head_base_eval.py`, a historical helper kept strictly for this import. Neither cube writer regenerates the prerequisite RCM, U-Net, mask cubes or original metadata. Hence **full figure generation from only public raw downloads has not been independently verified**.
+
+With complete cubes present, run the original source statistical analyses, for example:
+
+```bash
+python analysis/scripts/05_block_bootstrap_core.py
+python analysis/scripts/05b_block_bootstrap_3yr.py
+python analysis/scripts/05c_block_bootstrap_10yr.py
+python analysis/scripts/03_daily_persistence.py
+python analysis/scripts/39_generate_final_temporal_evolution.py
+```
+
+Other original paper figure generators are in `analysis/scripts/`. The `results/` directory retains author-provided reference summaries and selected figures for checking outputs; these were not regenerated during this code reorganization.
+
+## 4. Validation levels
+
+1. **Static:** integrity and syntax checks (`tools/author_source_integrity.py`, `tools/preflight.py`).
+2. **Model interface:** synthetic forward for E and E2 (`tools/smoke_test_models.py`), no climate data required.
+3. **Numerical:** requires original data, weights, full output cubes and compatible compute environment. **Not executed in this audit**.
+
+Results should be compared using original unrounded values; rounding in the manuscript is for presentation. Nothing in this release establishes independent exact numerical reproduction across arbitrary Python/PyTorch/GPU versions.

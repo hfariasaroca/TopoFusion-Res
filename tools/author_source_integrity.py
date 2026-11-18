@@ -9,6 +9,6 @@ for row in rows:
     p=root/row['repo_path']
     if not p.is_file() or hashlib.sha256(p.read_bytes()).hexdigest()!=row['sha256']:
         bad.append(row['repo_path'])
-print(f'Author-source integrity: {len(rows)-len(bad)}/{len(rows)} files match their source hashes')
+print(f'Code-integrity check: {len(rows)-len(bad)}/{len(rows)} files match v5 source hashes')
 if bad: print('Modified/missing:',*bad,sep='\n  ')
 sys.exit(bool(bad))

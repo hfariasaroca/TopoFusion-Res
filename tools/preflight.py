@@ -3,16 +3,16 @@
 from pathlib import Path
 import ast, sys, json
 ROOT=Path(__file__).resolve().parents[1]
-EXP=ROOT/'climate_swinir_experiments'/'model_E_cmip_swinunet_topography'
+EXP=ROOT
 required=[EXP/'models'/n for n in (
     'dataset_model_E.py','dataset_model_E_ablation.py',
-    'model_e_cmip_swinunet_topography.py','model_e2_residual_head.py'
+    'topofusion_base.py','model_e2_residual_head.py'
 )]+[EXP/'configs/config_model_E.json']
 missing=[p for p in required if not p.is_file()]
 print('Core source and configuration:',len(required)-len(missing),'/',len(required))
 for p in missing:print('MISSING',p.relative_to(ROOT))
 errors=[];abs_paths=[]; scripts=[]
-for folder in (EXP/'scripts', EXP/'paper_validation_final_seed20260813'/'scripts',EXP/'models'):
+for folder in (EXP/'scripts', EXP/'analysis'/'scripts',EXP/'models'):
     for p in sorted(folder.glob('*.py')):
         scripts.append(p)
         try: ast.parse(p.read_text(encoding='utf-8'))

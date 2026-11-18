@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-MODELS = ROOT / "climate_swinir_experiments" / "model_E_cmip_swinunet_topography" / "models"
+MODELS = ROOT / "models"
 sys.path.insert(0, str(MODELS))
 
 try:
@@ -12,7 +12,7 @@ try:
 except ImportError as exc:
     raise SystemExit("PyTorch is needed for the synthetic test; see docs/ENVIRONMENT.md") from exc
 
-from model_e_cmip_swinunet_topography import ModelECMIPSwinUNetTopography
+from topofusion_base import ModelECMIPSwinUNetTopography
 from model_e2_residual_head import ModelE2ResidualHead
 
 

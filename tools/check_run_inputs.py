@@ -3,12 +3,12 @@
 from __future__ import annotations
 import argparse,json
 from pathlib import Path
-EXPT='climate_swinir_experiments/model_E_cmip_swinunet_topography'
+EXPT='.'
 DATA='data/torch_dataset_model_E_physical_v1'
 
 def main():
     a=argparse.ArgumentParser(description=__doc__)
-    a.add_argument('--root',type=Path,default=Path('run'))
+    a.add_argument('--root',type=Path,default=Path(__file__).resolve().parents[1])
     a.add_argument('--mode',choices=('prepare','train','residual','evaluate'),required=True)
     args=a.parse_args()
     root=args.root.expanduser().resolve()
@@ -21,7 +21,7 @@ def main():
             if key=='training_ref_path':continue # present in config, unused by current preparation entry point
             need('raw:'+key,Path(value))
         need('fine orography',Path(cfg['paths']['orography_path']))
-        need('coarse GCM orography 22x22',Path(EXPT)/'diagnostics/cmip_orog_22x22_first_valid.npy')
+        need('coarse GCM orography 22x22',Path('assets/cmip_orog_22x22_first_valid.npy'))
     else:
         for name in ('train_inputs.npy','train_targets.npy','time_features_train.npy','ghg_features_train.npy',
                      'val_inputs.npy','val_targets.npy','time_features_val.npy','ghg_features_val.npy',
@@ -43,7 +43,7 @@ def main():
                 ('phase2_e2','full','model_E2_v2_best.pth'),('phase2_e2','no_fine_topo','model_E2_v2_best.pth')):
                 epochs='40epochs' if stage=='phase1' else '12epochs'
                 need(f'checkpoint:{stage}-{variant}',Path(EXPT)/f'checkpoints/{stage}_{variant}_seed20260813_{epochs}/{filename}')
-            need('U-Net comparison NetCDF',Path('data_tomas/unet_outputs/tas_cmip_cmip_output.nc'))
+            need('U-Net comparison NetCDF',Path('inputs/unet/tas_cmip_cmip_output.nc'))
     missing=0
     for name,p in files.items():
         ok=p.is_file()
