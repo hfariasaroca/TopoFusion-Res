@@ -86,6 +86,6 @@ python analysis/scripts/05c_block_bootstrap_10yr.py
 
 ## Citation and availability
 
-Please cite the manuscript specified in [`CITATION.cff`](CITATION.cff). Source code, reference summaries and a small derived orography file are included; raw climate datasets, weights and complete prediction cubes are **not**. Redistribution rights for the derived orography and data-access conditions must be confirmed before a public release. No software license has yet been declared.
+Please cite the manuscript specified in [`CITATION.cff`](CITATION.cff). Source code, reference summaries and a small derived orography file are included; raw climate datasets, weights and complete prediction cubes are **not**. The source code is distributed under the [BSD 3-Clause License](LICENSE). The derived orography is included for reproducibility; its upstream data terms must be respected. Raw climate data, trained weights and prediction cubes are not distributed.
 
 Español: [README.es.md](README.es.md) · [Data](docs/DATA.md) · [Reproducibility](docs/REPRODUCIBILITY.md) · [Source provenance](docs/PROVENANCE.md)

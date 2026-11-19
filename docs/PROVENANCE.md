@@ -12,4 +12,4 @@ Of 39 author-provided scientific files in version 4, 38 are retained in this red
 
 The script changes were checked for Python syntax; the model-forward test runs without real data. No complete training or numerical evaluation has been independently executed after this reorganization. Users should compare runs against the paper and the reference outputs.
 
-The source and result distribution requires appropriate author and institutional permissions. The repository intentionally contains no checkpoints or raw climate datasets. No code license has been chosen.
+The source and result distribution requires appropriate author and institutional permissions. The repository intentionally contains no checkpoints or raw climate datasets. The source code is distributed under the BSD-3-Clause license. Upstream data rights and scientific provenance are documented separately.

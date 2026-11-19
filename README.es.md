@@ -64,6 +64,6 @@ Los checkpoints se generan en `checkpoints/` y las evaluaciones en `diagnostics/
 
 Los scripts de `analysis/scripts/` incluyen bootstrap de bloques de 3/5/10 años, persistencia diaria, tendencias, extremos y ablaciones topográficas. Requieren cubos de predicciones externos que no están publicados. Los pasos y las dependencias conocidas están explicados en [reproducibilidad](docs/REPRODUCIBILITY.md); los resultados originales de referencia se encuentran en `results/`.
 
-No se ha verificado una reproducción independiente completa desde NetCDF hasta las cifras del paper. Los datos climáticos originales, pesos entrenados y cubos grandes no forman parte del repositorio. Antes de hacerlo público es necesario resolver la licencia de código y los permisos de la orografía derivada.
+No se ha verificado una reproducción independiente completa desde NetCDF hasta las cifras del paper. Los datos climáticos originales, pesos entrenados y cubos grandes no forman parte del repositorio. El código se distribuye bajo la [licencia BSD de 3 cláusulas](LICENSE). La orografía derivada se mantiene para reproducibilidad, respetando las condiciones aplicables a los datos de origen.
 
 [README en inglés](README.md) · [Datos](docs/DATA.md) · [Reproducibilidad](docs/REPRODUCIBILITY.md)

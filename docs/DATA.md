@@ -18,7 +18,7 @@ data/torch_dataset_model_E_physical_v1/     # created by preparation
 checkpoints/                                 # created by training
 ```
 
-The file `assets/cmip_orog_22x22_first_valid.npy` is a 22 × 22 float32 derived field provided by the authors. Its upstream generation script has not been recovered; **do not claim an independently reproducible orography derivation**. Redistribution of this derived field must be authorized before the repository becomes public.
+The file `assets/cmip_orog_22x22_first_valid.npy` is a 22 × 22 float32 derived field provided by the authors. Its upstream generation script has not been recovered; **do not claim an independently reproducible orography derivation**. This derived field is included for scientific reproducibility. Users must respect applicable upstream data terms when redistributing it.
 
 The code's configuration includes a historical, unused `training_ref_path` and historical epoch fields; final training scripts explicitly fix the 40/12-epoch protocol. The JSON's `model.attention_*` fields are historical and do not imply a Transformer model.
 
